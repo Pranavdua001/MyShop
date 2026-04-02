@@ -91,6 +91,35 @@ main{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
   box-shadow:0 10px 25px rgba(0,0,0,0.25);
   background:#2563EB;
 }
+.img-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s;
+}
+
+.img-modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:12px;
+  transform:scale(0.8);
+  transition:transform .3s;
+}
+
+.img-modal.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.img-modal.show img{
+  transform:scale(1);
+}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes tout{from{opacity:1}to{opacity:0;transform:translateY(-6px)}}
 footer{background:var(--text);color:rgba(255,255,255,.4);text-align:center;padding:1.5rem;font-size:.75rem;letter-spacing:.05em}
@@ -183,8 +212,7 @@ const FB = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='
 document.getElementById("grid").innerHTML = PRODUCTS.map(p=>`
   <div class="card">
     <div class="img-wrap">
-      <img src="${p.image}" alt="${p.name}" onerror="this.src='${FB}'">
-      <span class="code-tag">${p.code}</span>
+<img src="${p.image}" alt="${p.name}" onclick="openImg(this.src)" onerror="this.src='${FB}'">      <span class="code-tag">${p.code}</span>
     </div>
     <div class="info">
       ${p.category?`<div class="cat">${p.category}</div>`:""}
@@ -271,6 +299,19 @@ function toast(msg){
   t.className="toast";t.textContent=msg;
   w.appendChild(t);setTimeout(()=>t.remove(),2100);
 }
+  function openImg(src){
+  const modal = document.getElementById("imgModal");
+  const img = document.getElementById("modalImg");
+  img.src = src;
+  modal.classList.add("show");
+}
+
+function closeImg(){
+  document.getElementById("imgModal").classList.remove("show");
+}
 </script>
+<div id="imgModal" class="img-modal" onclick="closeImg()">
+  <img id="modalImg">
+</div>
 </body>
 </html>
